@@ -4,6 +4,24 @@ import time
 import threading
 from pynput import keyboard
 
+
+class UART:
+    def __init__(self, port, interival = 1.0):
+        self.stop = False
+        self.interval = interval
+        slef.port = port
+
+    def message(self, msgs):
+        self.messages = msgs
+
+    def _loop(self):
+        if self.stop == True:
+            return
+        threading.Timer(self.interval, self._loop, [self]).start()
+        _loop_message()
+
+    def _loop_message(self):
+
 global_stop = False
 t = 0
 
