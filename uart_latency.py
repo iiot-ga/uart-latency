@@ -31,6 +31,10 @@ it waits for the next connect.
             action='store_true',
             help='Development mode, prints Python internals on errors',
             default=False)
+    parser.add_argument(
+            "MESSAGE"
+            help="gauge loop-back tranmiting time of message"
+            narg=a'+')
 
     group = parser.add_argument_group('serial port')
 
@@ -109,4 +113,8 @@ it waits for the next connect.
         sys.stderr.write('Could not open serial port {}: {}\n'.format(ser.name, e))
         sys.exit(1)
 
+    import loop
+
+    uart = loop.UART(ser)
+    uart.message(args.MESSAGE)
 
