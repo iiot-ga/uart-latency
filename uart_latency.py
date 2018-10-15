@@ -32,9 +32,9 @@ it waits for the next connect.
             help='Development mode, prints Python internals on errors',
             default=False)
     parser.add_argument(
-            "MESSAGE"
-            help="gauge loop-back tranmiting time of message"
-            narg=a'+')
+            'MESSAGE',
+            help='gauge loop-back tranmiting time of message',
+            nargs='+')
 
     group = parser.add_argument_group('serial port')
 
@@ -90,6 +90,8 @@ it waits for the next connect.
     print(args)
 
     # connect to serial port
+    import serial
+    import sys
     ser = serial.serial_for_url(args.SERIALPORT, do_not_open=True)
     ser.baudrate = args.BAUDRATE
     ser.parity = args.parity

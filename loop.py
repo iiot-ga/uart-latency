@@ -1,7 +1,5 @@
 import time
 import threading
-from pynput import keyboard
-
 
 class UART:
     def __init__(self, port, interval = 1.0):
@@ -9,20 +7,27 @@ class UART:
         self.interval = interval
         self.port = port
         self.start = None
-        self.messages = None
+        self.messages = []
+        self.index = None
 
     def message(self, msgs):
-        self.messages = msgs
+        for s in msgs:
+            self.messages.append(str(s + '\n').encode('utf-8'))
+        self.index = 0
+        self._loop()
 
     def _loop(self):
         if self.stop == True:
             return
         threading.Timer(self.interval, self._loop, [self]).start()
-        _loop_message()
+        self._loop_message()
 
     def _loop_message(self):
         self.start = time.perf_counter_ns()
-        self.port.write(mesg)
+        self.port.write(self.messages
+                [self.index])
+        self.index += 1
+        self.index %= len(self.messages)
 
     def _on_press(key):
         print('{0} pressed'.format(key))
