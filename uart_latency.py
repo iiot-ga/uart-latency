@@ -1,13 +1,9 @@
 if __name__ == '__main__':  # noqa
     import argparse
     parser = argparse.ArgumentParser(
-            description='Simple Serial to Network (TCP/IP) redirector.',
+            description='Simple Serial gauge latency that include network(TCP/IP) path, if.',
             epilog="""\
-NOTE: no security measures are implemented. Anyone can remotely connect
-to this service over the network.
-
-Only one connection at once is supported. When the connection is terminated
-it waits for the next connect.
+NOTE: the measure is not ignore reciveing time that more characters is more time.
 """)
     parser.add_argument(
             'SERIALPORT',
@@ -87,7 +83,8 @@ it waits for the next connect.
 
     args = parser.parse_args()
 
-    print(args)
+    if args.develop:
+        print(args)
 
     # connect to serial port
     import serial
@@ -119,4 +116,10 @@ it waits for the next connect.
 
     uart = loop.UART(ser)
     uart.message(args.MESSAGE)
+    uart.start()
+    try:
+        while True:
+            uart.readline()
+    except KeyboardInterrupt:
+        uart.stop()
 

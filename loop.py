@@ -1,40 +1,35 @@
 import time
 import threading
 
-class UART:
+class UART(threading.Thread):
     def __init__(self, port, interval = 1.0):
-        self.stop = False
+        threading.Thread.__init__(self)
+        self.runable = True
         self.interval = interval
         self.port = port
-        self.start = None
+        self.tx_time = None
         self.messages = []
         self.index = None
 
     def message(self, msgs):
         for s in msgs:
-            self.messages.append(str(s + '\n').encode('utf-8'))
+            m = str(s + '\n').encode('utf-8')
+            self.messages.append(m)
+            print(m, "(", len(m), ")")
         self.index = 0
-        self._loop()
 
-    def _loop(self):
-        if self.stop == True:
-            return
-        threading.Timer(self.interval, self._loop, [self]).start()
-        self._loop_message()
+    def run(self):
+        while self.runable:
+            self.tx_time = time.perf_counter_ns()
+            self.port.write(self.messages[self.index])
+            self.index += 1
+            self.index %= len(self.messages)
+            time.sleep(self.interval)
 
-    def _loop_message(self):
-        self.start = time.perf_counter_ns()
-        self.port.write(self.messages
-                [self.index])
-        self.index += 1
-        self.index %= len(self.messages)
-
-    def _on_press(key):
-        print('{0} pressed'.format(key))
-        return False
-
-    def loop(self):
-        while self.stop == False:
+    def readline(self):
+        if self.runable:
             line = self.port.readline()
-            print(line, "->", time.perf_counter_ns() - self.start, "ns")
+            print(time.perf_counter_ns() - self.tx_time, "ns\t-> ", line)
 
+    def stop(self):
+        self.runable = False
