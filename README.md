@@ -7,7 +7,7 @@ It's better used "venv" for **virtual environments**
 ```
 git clone https://github.com/iiot-ga/uart-latency.git
 python3.7 -m venv uart-latency
-cd uart-latenc
+cd uart-latency
 source bin/activate
 pip install pyserial
 ```
