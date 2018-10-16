@@ -27,6 +27,13 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
             action='store_true',
             help='Development mode, prints Python internals on errors',
             default=False)
+
+    parser.add_argument(
+            "--interval",
+            type=float,
+            help='between sent message interval, default: 1.0 sec',
+            default=1.0)
+
     parser.add_argument(
             'MESSAGE',
             help='gauge loop-back tranmiting time of message',
@@ -89,6 +96,7 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
     # connect to serial port
     import serial
     import sys
+
     ser = serial.serial_for_url(args.SERIALPORT, do_not_open=True)
     ser.baudrate = args.BAUDRATE
     ser.parity = args.parity
@@ -114,7 +122,7 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
 
     import loop
 
-    uart = loop.UART(ser)
+    uart = loop.UART(ser, args.interval)
     uart.message(args.MESSAGE)
     uart.start()
     try:
