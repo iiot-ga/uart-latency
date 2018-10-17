@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+"""
+uart-latency
+-------------------------------------------------------------------------
+
+Gauge looped UART port latancy
+"""
+
 if __name__ == '__main__':  # noqa
     import argparse
     parser = argparse.ArgumentParser(

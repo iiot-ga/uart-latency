@@ -1,3 +1,12 @@
+"""
+loop.py
+-------------------------------------------------------------------------
+
+Used Python3.7 API that's time.perf_counter_ns(), so lock python version
+"""
+import sys
+assert sys.version_info >= (3,7)
+
 import time
 import threading
 
@@ -8,6 +17,7 @@ class UART(threading.Thread):
         self.interval = interval
         self.port = port
         self.tx_time = None
+        self.tx_duty = None
         self.messages = []
         self.index = None
 
@@ -22,6 +32,7 @@ class UART(threading.Thread):
         while self.runable:
             self.tx_time = time.perf_counter_ns()
             self.port.write(self.messages[self.index])
+            self.tx_duty = time.perf_counter_ns() - self.tx_time
             self.index += 1
             self.index %= len(self.messages)
             time.sleep(self.interval)
@@ -29,7 +40,8 @@ class UART(threading.Thread):
     def readline(self):
         if self.runable:
             line = self.port.readline()
-            print(time.perf_counter_ns() - self.tx_time, "ns\t-> ", line)
+            print("%9d ns (%7d ns)->%s" % (time.perf_counter_ns() - self.tx_time,
+                    self.tx_duty, line))
 
     def stop(self):
         self.runable = False
