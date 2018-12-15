@@ -18,13 +18,6 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
             help="serial port name")
 
     parser.add_argument(
-            'BAUDRATE',
-            type=int,
-            nargs='?',
-            help='set baud rate, default: %(default)s',
-            default=9600)
-
-    parser.add_argument(
             '-q', '--quiet',
             action='store_true',
             help='suppress non error messages',
@@ -49,12 +42,33 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
 
     group = parser.add_argument_group('serial port')
 
+    parser.add_argument(
+            '-B', '--baudrate',
+            type=int,
+            nargs='?',
+            help='set baud rate, default: %(default)s',
+            default=9600)
+
     group.add_argument(
             "--parity",
             choices=['N', 'E', 'O', 'S', 'M'],
             type=lambda c: c.upper(),
             help="set parity, one of {N E O S M}, default: N",
             default='N')
+
+    group.add_argument(
+            '--bytesize',
+            type=int,
+            choices=range(5, 9),
+            help="set data bits, one of {5,6,7,8}, default: 8",
+            default=8)
+
+    group.add_argument(
+            '--stopbits',
+            type=float,
+            choices=[1, 1.5, 2],
+            help="set stop bits, one of {1,1.5,2}, default: 1",
+            default=1)
 
     group.add_argument(
             '--rtscts',
@@ -106,10 +120,12 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
     import sys
 
     ser = serial.serial_for_url(args.SERIALPORT, do_not_open=True)
-    ser.baudrate = args.BAUDRATE
+    ser.baudrate = args.baudrate
     ser.parity = args.parity
     ser.rtscts = args.rtscts
     ser.xonxoff = args.xonxoff
+    ser.bytesize = args.bytesize
+    ser.stopbits = args.stopbits
 
     if args.rts is not None:
         ser.rts = args.rts
