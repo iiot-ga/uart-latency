@@ -65,9 +65,9 @@ NOTE: the measure is not ignore reciveing time that more characters is more time
 
     group.add_argument(
             '--stopbits',
-            type=float,
-            choices=[1, 1.5, 2],
-            help="set stop bits, one of {1,1.5,2}, default: 1",
+            type=int,
+            choices=[1, 2],
+            help="set stop bits, one of {1,2}, default: 1",
             default=1)
 
     group.add_argument(
