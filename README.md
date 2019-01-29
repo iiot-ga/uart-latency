@@ -59,3 +59,5 @@ time.
 ```
 python uart_latency.py --develop  --interval 0.5 /dev/ttyUSB0 115200 testwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww t te tes test
 ```
+
+### TEST
